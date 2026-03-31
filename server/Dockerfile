@@ -22,4 +22,7 @@ RUN uv pip install --python /workspace/.venv/bin/python pytest
 ENV PATH="/workspace/.venv/bin:${PATH}"
 ENV PYTHONPATH="/workspace:/workspace/src:/workspace/packages/policy-client/src"
 
+# Pre-download the tokenizer so the container works offline.
+RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct')"
+
 ENTRYPOINT ["/workspace/server/entrypoint.sh"]

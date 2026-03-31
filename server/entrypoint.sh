@@ -5,11 +5,13 @@ set -euo pipefail
 
 HOST="${POLICY_SERVER_HOST:-0.0.0.0}"
 PORT="${POLICY_SERVER_PORT:-8000}"
+DEVICE="${POLICY_PYTORCH_DEVICE:-cuda}"
 
 ARGS=(
   "--checkpoint-dir" "${POLICY_CHECKPOINT_DIR}"
   "--host" "${HOST}"
   "--port" "${PORT}"
+  "--device" "${DEVICE}"
 )
 
 exec /workspace/.venv/bin/python /workspace/server/serve_hsr_policy_ws.py "${ARGS[@]}"
