@@ -28,6 +28,15 @@ class SmolVLAPolicy:
     """Wraps a SmolVLA checkpoint for the ICRA evaluation server."""
 
     def __init__(self, checkpoint_dir: str, device: str = "cuda"):
+        # Bypass lerobot.policies.__init__ which eagerly imports all policies
+        # (including GROOT whose dataclass is broken on some Python versions).
+        import sys
+        import types
+        import lerobot
+        if "lerobot.policies" not in sys.modules:
+            _policies = types.ModuleType("lerobot.policies")
+            _policies.__path__ = [lerobot.__path__[0] + "/policies"]
+            sys.modules["lerobot.policies"] = _policies
         from lerobot.policies.smolvla.modeling_smolvla import SmolVLAPolicy as LeRobotSmolVLA
 
         self.device = torch.device(device)

@@ -3,10 +3,10 @@ name = "smolvla-icra"
 version = "0.1.0"
 description = "SmolVLA policy server for ICRA 2026 VLA Workshop Competition"
 readme = "README.md"
-requires-python = ">=3.11.0, <3.12"
+requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
-    "numpy>=1.22.4,<2.0.0",
+    "numpy>=1.22.4",
     "opencv-python>=4.10.0.84",
     "pillow>=11.0.0",
     "policy-client",
@@ -15,14 +15,15 @@ dependencies = [
     "transformers>=4.45.0",
     "lerobot",
     "websockets>=12.0",
+    "num2words>=0.5.13",
 ]
 
 [tool.uv]
-override-dependencies = []
+override-dependencies = ["av>=13.0.0,<14"]
 
 [tool.uv.sources]
 policy-client = { workspace = true }
-lerobot = { git = "https://github.com/huggingface/lerobot", rev = "0cf864870cf29f4738d3ade893e6fd13fbd7cdb5" }
+lerobot = { git = "https://github.com/huggingface/lerobot", rev = "d90e4bcfd33ecf89f1db45ad7315923c21da57bd" }
 
 [tool.uv.workspace]
 members = ["packages/*"]

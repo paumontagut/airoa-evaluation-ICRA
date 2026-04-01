@@ -15,14 +15,17 @@ COPY server ./server
 COPY runtime_core ./runtime_core
 
 # Create virtual environment and install locked deps including local workspace packages.
-RUN uv venv --python 3.11 /workspace/.venv
+RUN uv venv --python 3.12 /workspace/.venv
 RUN GIT_LFS_SKIP_SMUDGE=1 uv sync --frozen --no-dev --no-install-project
 RUN uv pip install --python /workspace/.venv/bin/python pytest
 
 ENV PATH="/workspace/.venv/bin:${PATH}"
 ENV PYTHONPATH="/workspace:/workspace/src:/workspace/packages/policy-client/src"
 
-# Pre-download the tokenizer so the container works offline.
-RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct')"
+# Pre-download tokenizer and processor so the container works offline.
+RUN python -c "\
+from transformers import AutoTokenizer, AutoProcessor; \
+AutoTokenizer.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct'); \
+AutoProcessor.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct')"
 
 ENTRYPOINT ["/workspace/server/entrypoint.sh"]
