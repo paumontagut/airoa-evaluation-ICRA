@@ -43,6 +43,7 @@ class WebsocketPolicyServer:
             max_size=None,
             process_request=_health_check,
         ) as server:
+            logger.info("WebSocket server listening on %s:%s", self._host, self._port)
             await server.serve_forever()
 
     async def _handler(self, websocket: _server.ServerConnection):

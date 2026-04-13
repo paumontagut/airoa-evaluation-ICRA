@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git git-lfs build-essential clang ca-certificates curl && \
+    git git-lfs build-essential clang ca-certificates curl libcurl4 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml uv.lock LICENSE README.md ./
@@ -22,10 +22,16 @@ RUN uv pip install --python /workspace/.venv/bin/python pytest
 ENV PATH="/workspace/.venv/bin:${PATH}"
 ENV PYTHONPATH="/workspace:/workspace/src:/workspace/packages/policy-client/src"
 
-# Pre-download tokenizer and processor so the container works offline.
+# Pre-download tokenizer and processor into a fixed cache directory inside the image.
+# This ensures the container works fully offline regardless of HF_HOME overrides.
+ENV HF_HOME="/workspace/.hf_cache"
 RUN python -c "\
 from transformers import AutoTokenizer, AutoProcessor; \
 AutoTokenizer.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct'); \
 AutoProcessor.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct')"
+
+# Never attempt network downloads at runtime.
+ENV TRANSFORMERS_OFFLINE=1
+ENV HF_HUB_OFFLINE=1
 
 ENTRYPOINT ["/workspace/server/entrypoint.sh"]
