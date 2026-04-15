@@ -26,9 +26,10 @@ ENV PYTHONPATH="/workspace:/workspace/src:/workspace/packages/policy-client/src"
 # This ensures the container works fully offline regardless of HF_HOME overrides.
 ENV HF_HOME="/workspace/.hf_cache"
 RUN python -c "\
-from transformers import AutoTokenizer, AutoProcessor; \
+from transformers import AutoTokenizer, AutoProcessor, AutoModelForImageTextToText; \
 AutoTokenizer.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct'); \
-AutoProcessor.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct')"
+AutoProcessor.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct'); \
+AutoModelForImageTextToText.from_pretrained('HuggingFaceTB/SmolVLM2-500M-Video-Instruct')"
 
 # Never attempt network downloads at runtime.
 ENV TRANSFORMERS_OFFLINE=1
