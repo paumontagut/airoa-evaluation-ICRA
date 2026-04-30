@@ -166,5 +166,5 @@ Total size on disk: ~5.7 GiB, 23 files.
 ## 8. Contact
 
 - Team: Team 35 — V4R Lab, TU Wien
-- Representative: Pau Montagut Bofi <info@symplia.es>
+- Representative: Pau Montagut Bofi (please reply to this email thread)
 - Submission date: 2026-04-30
